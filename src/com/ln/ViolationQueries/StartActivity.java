@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 
 public class StartActivity extends Activity {
+    private String TAG = StartActivity.class.getSimpleName();
     /**
      * Called when the activity is first created.
      */
