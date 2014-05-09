@@ -1,0 +1,13 @@
+1.安装GitHubSetup
+2.安装好GitHubSetup后,搜索C盘目录,查找git.exe.
+3.获取git.exe目录.
+4.配置Idea。file-->Settings-->Version Control-->Git
+5.将git.exe所在路径添加到 Path to Git executable:
+  例如：C:\Users\nq\AppData\Local\GitHub\PortableGit_054f2e797ebafd44a30203088cd3d58663c627ef\cmd\git.exe
+6.使用方法：
+  a VCS--->checkout from version control-->github
+  b 选择check后的目录
+  c 将创建好的工程,放在check目录下.(不要带文件夹,直接放)
+  d 当修改class时,在工程右键,Git--->Commit Directory--->勾选要上传的文件后，Commit时工作原理是，先Commit到本地库，
+    然后，需要push到服务器端。和SVN不同得是，需要两部。提交本地库，推送到Git服务器。
+     
