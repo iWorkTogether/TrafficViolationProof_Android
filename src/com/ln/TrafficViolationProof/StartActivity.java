@@ -1,4 +1,4 @@
-package com.ln.ViolationQueries;
+package com.ln.TrafficViolationProof;
 
 import android.app.Activity;
 import android.os.Bundle;
