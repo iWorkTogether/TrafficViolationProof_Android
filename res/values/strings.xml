@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ViolationQueries</string>
+    <string name="act__get_request__btn_request">Execute get request</string>
+    <string name="act__post_request__btn_request">违章查询</string>
 </resources>
