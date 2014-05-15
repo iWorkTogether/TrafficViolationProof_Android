@@ -4,6 +4,8 @@ import java.net.URLEncoder;
 
 import org.json.JSONObject;
 
+import com.ln.model.ViolationResult;
+
 import android.text.TextUtils;
 
 public class ViolationQueryProtocol {
@@ -16,6 +18,14 @@ public class ViolationQueryProtocol {
 	private String _licNumber="冀F810JH";
 	private String _engineNumber="hgdddf";
 	private String _frameNumber;
+	
+	private ViolationResult _result = new ViolationResult();
+	
+	//获取查询结果
+	public ViolationResult getViolationResult()
+	{
+		return _result;
+	}
 	
 	public void set(String area,String licNumber,String engineNumber,String frameNumber)
 	{
@@ -54,8 +64,93 @@ public class ViolationQueryProtocol {
 	}
 	
 	//TODO::暂时没实现
+	/*
+	 * 
+json:
+{
+    "info": {
+        "@attributes": {
+            "type": "wz_v2",
+            "error": "0",
+            "detail": "查询到您有1条违章信息！",
+            "lastUpdateTime": "6:43",
+            "requestid": "64621256",
+            "postage": "0"
+        },
+        "wz": {
+            "@attributes": {
+                "wzid": "0",
+                "msgid": "0",
+                "lpn": "冀F810JH",
+                "time": "2014-04-19 14:51:00",
+                "location": "二拨子桥下 北向南",
+                "reason": "违反禁令标志指示的",
+                "penalty": "100",
+                "points": "3",
+                "illegal": "13441",
+                "db_status": "0",
+                "tip": "不可申请代办",
+                "fee": "0.0",
+                "city": ""
+            }
+        }
+    }
+}
+
+
+多条：
+{
+    "info": {
+        "@attributes": {
+            "type": "wz_v2",
+            "error": "0",
+            "detail": "查询到您有1条违章信息！",
+            "lastUpdateTime": "6:43",
+            "requestid": "64621256",
+            "postage": "0"
+        },
+        "wz": [
+            {
+                "@attributes": {
+                    "wzid": "0",
+                    "msgid": "0",
+                    "lpn": "冀F810JH",
+                    "time": "2014-04-19 14:51:00",
+                    "location": "二拨子桥下 北向南",
+                    "reason": "违反禁令标志指示的",
+                    "penalty": "100",
+                    "points": "3",
+                    "illegal": "13441",
+                    "db_status": "0",
+                    "tip": "不可申请代办",
+                    "fee": "0.0",
+                    "city": ""
+                }
+            },
+            {
+                "@attributes": {
+                    "wzid": "1",
+                    "msgid": "1",
+                    "lpn": "冀F810JH",
+                    "time": "2014-04-19 14:51:00",
+                    "location": "二拨子桥下 北向南",
+                    "reason": "违反禁令标志指示的",
+                    "penalty": "100",
+                    "points": "3",
+                    "illegal": "13441",
+                    "db_status": "0",
+                    "tip": "不可申请代办",
+                    "fee": "0.0",
+                    "city": ""
+                }
+            }
+        ]
+    }
+}
+	 */
 	public Object unpack(byte[] data)
 	{
+		//TODO::解析json
 		return null;
 	}
 
