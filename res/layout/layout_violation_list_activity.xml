@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <!-- 页面布局(参考车友会的查询页面) 
+    TitleBar:返回  车牌切换下拉列表  切换城市等下拉列表
+    Body: 违章详情页面Listview
+    
+    -->
+    <Button
+        android:id="@+id/btn_get_request"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/act__get_request__btn_request" >
+    </Button>
+
+    <Button
+        android:id="@+id/btn_post_request"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/act__post_request__btn_request" >
+    </Button>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/tv_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </ScrollView>
+
+</LinearLayout>
