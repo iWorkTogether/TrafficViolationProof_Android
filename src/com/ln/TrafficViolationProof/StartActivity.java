@@ -1,5 +1,6 @@
 package com.ln.TrafficViolationProof;
 
+import java.util.List;
 import java.util.Locale;
 
 import android.app.Activity;
@@ -22,6 +23,8 @@ import com.idreems.sdk.lightvolley.TaskQueue;
 import com.idreems.sdk.lightvolley.TaskResponse;
 import com.ln.common.Des;
 import com.ln.common.GZip;
+import com.ln.model.Penalty;
+import com.ln.model.ViolationResult;
 import com.ln.protocols.ViolationQueryProtocol;
 
 public class StartActivity extends Activity implements TaskListener {
@@ -84,13 +87,44 @@ public class StartActivity extends Activity implements TaskListener {
 			return;
 		}
 
-		//TODO::解析协议，暂时没有实现,直接输出json了
-//		new ViolationQueryProtocol().unpack(((HttpTaskResponse) response).data);
+		// TODO::解析协议，暂时没有实现,直接输出json了
 		String r = new String(((HttpTaskResponse) response).data);
+		Object tmp = new ViolationQueryProtocol()
+				.unpack(((HttpTaskResponse) response).data);
+		// 是否有违章
+		ViolationResult result = null;
+		if (tmp instanceof ViolationResult) {
+			result = (ViolationResult) tmp;
+		}
+		// 组织展现
+		if (result != null) {
+			if (result._penalties == null || result._penalties.size() == 0) {
+				r = result._detail;
+			} else {
+				StringBuilder allPenalitiesBuilder = new StringBuilder();
+				List<Penalty> penaltyList = result._penalties;
+				for (Penalty penalty : penaltyList) {
+					allPenalitiesBuilder.append(String.format(
+							"%s %s %s %s %s\n\n", penalty._timeString,
+							penalty._locationString, penalty._reasonString,
+							penalty._fineString, penalty._pointsString));
+				}
+				r = allPenalitiesBuilder.toString();
+			}
+		}
+		
+		//TODO::在新的界面中展现违章信息
+		//违章界面：参考车友会的展示界面：切换城市；查询违章处理地；地图模式查看；周边违章（其他人的违章地点，原因）
+		//每个项目：详情页；标记为已处理(将不再出现在新的查询结果中)；查看违章地点(全景图)
+		//每个违章项目的设计：尽量图形化（时间，地点，原因，处罚措施，全景图（暗含可以查看全景图））
+		//延伸：
+		//1.现有查询软件，查询后就不能再查看违章信息了：退出历史违章
+		//2.
 		if (!TextUtils.isEmpty(r)) {
 			TextView tView = (TextView) findViewById(R.id.tv_result);
 			tView.setText(r);
 		}
+
 		// time to release
 		if (_taskQueue.size() == 0) {
 			_taskQueue.stop();

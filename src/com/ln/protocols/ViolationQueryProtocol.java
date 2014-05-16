@@ -135,91 +135,81 @@ public class ViolationQueryProtocol {
 	}
 	
 	public Object unpack(byte[] data)
-	{
-		
+	{	
 		if (data==null||data.length==0) {
-			return null;
+			return _result;
 		}
 		
 		//TODO::½âÎöjson
 		try {
-			JSONObject jsonObj = new JSONObject(new String(data));
+			final JSONObject baseJsonObj = new JSONObject(new String(data));
 			//parse info
-			final Object info = getJsonObject(jsonObj,"info");
-			Object ret = info;
+			final Object attributesJsonObj = getJsonObject(baseJsonObj,"@attributes");
+			Object tmpObj= attributesJsonObj;
 			
-			if (ret==null|| !(ret instanceof JSONObject) ) {
-				return null;
+			if (attributesJsonObj==null|| !(attributesJsonObj instanceof JSONObject) ) {
+				return _result;
 			}
 			
-			ret = getJsonObject((JSONObject)ret, "@attributes");
-			if (ret==null) {
-				return null;
-			}
-			
-			ret = getJsonObject((JSONObject)ret, "error");
-			if (ret instanceof String) {
-				String error = (String)ret;
+			tmpObj = getJsonObject((JSONObject)tmpObj, "error");
+			if (tmpObj instanceof String) {
+				String error = (String)tmpObj;
 				if (TextUtils.isEmpty(error)) {
-					return null;
+					return _result;
 				}
 				try {
 					if (Integer.valueOf(error)!=0) {
-						return null;
+						return _result;
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
-					return null;
+					return _result;
 				}
 			}
-			final JSONObject item = (JSONObject)ret;
-			ret = getJsonObject(item, "detail");
-			if (ret instanceof String) 
+			tmpObj = getJsonObject((JSONObject)attributesJsonObj, "detail");
+			if (tmpObj instanceof String) 
 			{
-				_result._detail=(String)ret;
+				_result._detail=(String)tmpObj;
 			}
 			
-			ret = getJsonObject(item, "lastUpdateTime");
-			if (ret instanceof String) 
+			tmpObj = getJsonObject((JSONObject)attributesJsonObj, "lastUpdateTime");
+			if (tmpObj instanceof String) 
 			{
-				_result._lastUpdateTime=(String)ret;
+				_result._lastUpdateTime=(String)tmpObj;
 			}
 			
 			//parse wz(obj or array)
-			if (info==null|| !(info instanceof JSONObject) ) {
-				return null;
-			}
-			ret = getJsonObject((JSONObject)info,"wz");
+			tmpObj = getJsonObject(baseJsonObj,"wz");
 			
-			if (ret==null) {
-				return null;
+			if (tmpObj==null) {
+				return _result;
 			}
 			
 			//object or array
-			if (ret instanceof JSONObject) {
-				ret = getJsonObject((JSONObject)ret, "@attributes");
-				if (ret==null) {
-					return null;
+			if (tmpObj instanceof JSONObject) {
+				tmpObj = getJsonObject((JSONObject)tmpObj, "@attributes");
+				if (tmpObj==null) {
+					return _result;
 				}
 				
-				Penalty penalty = parsePenalty((JSONObject)ret);
+				Penalty penalty = parsePenalty((JSONObject)tmpObj);
 				if(penalty!=null)
 				{
 					_result._penalties.add(penalty);
 				}
 			}
-			else if(ret instanceof JSONArray) {
-				JSONArray array = (JSONArray)ret;
+			else if(tmpObj instanceof JSONArray) {
+				JSONArray array = (JSONArray)tmpObj;
 				for (int i = 0; i < array.length(); i++) {
-					ret = array.get(i);
+					tmpObj = array.get(i);
 					
-					if (ret instanceof JSONObject) {
-						ret = getJsonObject((JSONObject)ret, "@attributes");
-						if (ret==null) {
-							return null;
+					if (tmpObj instanceof JSONObject) {
+						tmpObj = getJsonObject((JSONObject)tmpObj, "@attributes");
+						if (tmpObj==null) {
+							return _result;
 						}
 						
-						Penalty penalty = parsePenalty((JSONObject)ret);
+						Penalty penalty = parsePenalty((JSONObject)tmpObj);
 						if(penalty!=null)
 						{
 							_result._penalties.add(penalty);
@@ -242,8 +232,7 @@ public class ViolationQueryProtocol {
 	 * 
 	 * 
 json:
-{
-    "info": {
+    {
         "@attributes": {
             "type": "wz_v2",
             "error": "0",
@@ -270,12 +259,10 @@ json:
             }
         }
     }
-}
 
 
 ¶àÌõ£º
-{
-    "info": {
+ {
         "@attributes": {
             "type": "wz_v2",
             "error": "0",
@@ -321,7 +308,6 @@ json:
             }
         ]
     }
-}
 	 */
 	
 
