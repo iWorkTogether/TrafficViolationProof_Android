@@ -27,6 +27,11 @@ import com.ln.model.Penalty;
 import com.ln.model.ViolationResult;
 import com.ln.protocols.ViolationQueryProtocol;
 
+/**
+ * 主界面
+ * @author ramonqlee
+ *
+ */
 public class StartActivity extends Activity implements TaskListener {
 	private static final int HTTP_TIME_OUT = 10000;
 	private static final String REQUE_URL_STRING = "http://trafficviolationproof.duapp.com/trafficquery.php";
@@ -87,7 +92,7 @@ public class StartActivity extends Activity implements TaskListener {
 			return;
 		}
 
-		// TODO::解析协议，暂时没有实现,直接输出json了
+		// TODO::跳转到违章展示界面进行展示
 		String r = new String(((HttpTaskResponse) response).data);
 		Object tmp = new ViolationQueryProtocol()
 				.unpack(((HttpTaskResponse) response).data);
