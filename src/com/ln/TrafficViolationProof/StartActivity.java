@@ -1,6 +1,5 @@
 package com.ln.TrafficViolationProof;
 
-import java.util.List;
 import java.util.Locale;
 
 import android.app.Activity;
@@ -69,8 +68,9 @@ public class StartActivity extends Activity implements TaskListener {
 						.newHttpPostDataSource(REQUE_URL_STRING);
 				postDatasource.setTimeoutMs(HTTP_TIME_OUT);
 
-				postDatasource.setBody(encrypt(new ViolationQueryProtocol()
-						.pack()));
+				ViolationQueryProtocol protocol = new ViolationQueryProtocol();
+				protocol.set("北京", "冀FRB091", "jfiojfodajoifd", "");
+				postDatasource.setBody(encrypt(protocol.pack()));
 
 				// 加入任务执行队列，执行post请求
 				_taskQueue.add(TaskForker.newHttpTask(getApplicationContext(),
@@ -92,35 +92,26 @@ public class StartActivity extends Activity implements TaskListener {
 			return;
 		}
 
-		// TODO::跳转到违章展示界面进行展示
-		String r = new String(((HttpTaskResponse) response).data);
-		Object tmp = new ViolationQueryProtocol()
-				.unpack(((HttpTaskResponse) response).data);
-		// 是否有违章
-		ViolationResult result = null;
-		if (tmp instanceof ViolationResult) {
-			result = (ViolationResult) tmp;
-		}
-		// 组织展现
-		if (result != null) {
-			if (result._penalties == null || result._penalties.size() == 0) {
-				r = result._detail;
-			} else {
-				StringBuilder allPenalitiesBuilder = new StringBuilder();
-				List<Penalty> penaltyList = result._penalties;
-				for (Penalty penalty : penaltyList) {
-					allPenalitiesBuilder.append(String.format(
-							"%s %s %s %s %s\n\n", penalty._timeString,
-							penalty._locationString, penalty._reasonString,
-							penalty._fineString, penalty._pointsString));
-				}
-				r = allPenalitiesBuilder.toString();
-			}
+		//TODO::解析协议，暂时没有实现,直接输出json了
+		ViolationQueryProtocol protocol = new ViolationQueryProtocol();
+		protocol.unpack(((HttpTaskResponse) response).data);
+		ViolationResult result = protocol.getViolationResult();
+		if (result._penalties==null||result._penalties.size()==0) {
+			return;
 		}
 		
-		if (!TextUtils.isEmpty(r)) {
+		StringBuilder textBuilder = new StringBuilder();
+		textBuilder.append(result._detail);
+		textBuilder.append("\n");
+		
+		for (Penalty penalty :result._penalties) {
+			textBuilder.append(penalty.toString());
+			textBuilder.append("\n");
+		}
+		
+		if (!TextUtils.isEmpty(textBuilder)) {
 			TextView tView = (TextView) findViewById(R.id.tv_result);
-			tView.setText(r);
+			tView.setText(textBuilder.toString());
 		}
 
 		// time to release

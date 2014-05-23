@@ -131,6 +131,12 @@ public class ViolationQueryProtocol {
 			penalty._illegalCodeString = (String)ret;
 		}
 		
+		ret = getJsonObject(tmp, "tip");
+		if (ret instanceof String) 
+		{
+			penalty._tipString = (String)ret;
+		}
+		
 		return penalty;
 	}
 	
@@ -258,7 +264,7 @@ json:
                 "city": ""
             }
         }
-    }
+}
 
 
 多条：
@@ -306,7 +312,16 @@ json:
                     "city": ""
                 }
             }
-        ]
+        }
+    ], 
+    "@attributes": {
+        "detail": "查询到您有2条违章信息！", 
+        "requestid": "72720301", 
+        "error": "0", 
+        "type": "wz_v2", 
+        "tmbSite": "http://www.bjjtgl.gov.cn/publish/portal0/", 
+        "lastUpdateTime": "9:41", 
+        "postage": "0"
     }
 	 */
 	
